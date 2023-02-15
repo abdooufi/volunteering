@@ -78,11 +78,16 @@ class BackendBaseController extends Controller
         $term = trim($request->q);
 
         if (empty($term)) {
-            return response()->json([]);
+            $query_data = $module_model::get();
+
+        }
+        else{
+            $query_data = $module_model::where('name', 'LIKE', "%$term%")->orWhere('slug', 'LIKE', "%$term%")->orWhere('id', 'LIKE', "%$term%")->limit(7)->get();
+
+ 
         }
 
-        $query_data = $module_model::where('name', 'LIKE', "%$term%")->orWhere('slug', 'LIKE', "%$term%")->limit(7)->get();
-
+   
         $$module_name = [];
 
         foreach ($query_data as $row) {

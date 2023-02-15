@@ -18,6 +18,12 @@ class Association extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
+
+     public function volunteerings()
+     {
+         return $this->hasMany('Modules\Volunteering\Models\Volunteering');
+     }
+
     protected static function newFactory()
     {
         return \Modules\Association\database\factories\AssociationFactory::new();
