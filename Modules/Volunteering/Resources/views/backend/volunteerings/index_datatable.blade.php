@@ -14,7 +14,7 @@
 
         <x-backend.section-header>
             <i class="{{ $module_icon }}"></i> {{ __($module_title) }} <small class="text-muted">{{ __($module_action) }}</small>
-
+          
             <x-slot name="subtitle">
                 @lang(":module_name Management Dashboard", ['module_name'=>Str::title($module_name)])
             </x-slot>
@@ -22,7 +22,7 @@
                 @can('add_'.$module_name)
                 <x-buttons.create route='{{ route("backend.$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
                 @endcan
-
+                <a href="{{route("frontend.$module_name.index")}}" class="btn btn-primary" target="_blank"><i class="fas fa-link"></i> Public View</a>
                 @can('restore_'.$module_name)
                 <div class="btn-group">
                     <button class="btn btn-secondary dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
@@ -55,7 +55,18 @@
                                 @lang("volunteering::text.name")
                             </th>
                             <th>
-                                @lang("volunteering::text.updated_at")
+                                @lang("volunteering::text.created_by_name")
+                            </th>
+
+                            <th>
+                                @lang("volunteering::text.association_name")
+                            </th>
+                            <th>
+                                @lang("volunteering::text.volunteering_hour")
+                            </th>
+
+                            <th>
+                                @lang("volunteering::text.volunteering_date")
                             </th>
                             <th class="text-end">
                                 @lang("volunteering::text.action")
@@ -70,7 +81,7 @@
         <div class="row">
             <div class="col-7">
                 <div class="float-left">
-
+                (@lang(":count hours", ['count'=>$volunteering_hour_count]))
                 </div>
             </div>
             <div class="col-5">
@@ -110,8 +121,22 @@
                 name: 'name'
             },
             {
-                data: 'updated_at',
-                name: 'updated_at'
+                data: 'created_by_name',
+                name: 'created_by_name'
+            },
+         
+            {
+                data: 'association_name',
+                name: 'association_name'
+            },
+         
+            {
+                data: 'volunteering_hour',
+                name: 'volunteering_hour'
+            },
+            {
+                data: 'volunteering_date',
+                name: 'volunteering_date'
             },
             {
                 data: 'action',

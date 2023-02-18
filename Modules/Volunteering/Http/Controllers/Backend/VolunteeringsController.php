@@ -7,7 +7,9 @@ use App\Http\Controllers\Backend\BackendBaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Yajra\DataTables\DataTables;
 
 class VolunteeringsController extends BackendBaseController
 {
@@ -33,12 +35,80 @@ class VolunteeringsController extends BackendBaseController
 
   
 
-    /**
-     * Store a newly created resource in storage.
+/**
+     * Display a listing of the resource.
      *
-     * @param  Request  $request
      * @return Response
      */
+    public function index()
+    {
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+          $module_path = $this->module_path;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'List'; 
+        $volunteering_hour_count = $module_model::get()->sum('volunteering_hour');
+        
+        $$module_name = $module_model::where('created_by', '=',Auth::user()->id)->paginate();
+
+        $$module_name_singular = $module_model::where('created_by', '=',Auth::user()->id)->paginate();
+
+        Log::info(label_case($module_title.' '.$module_action).' | User:'.Auth::user()->name.'(ID:'.Auth::user()->id.')');
+
+        return view(
+            "$module_path.$module_name.index_datatable",
+            compact('module_title', 'module_name', "$module_name", 'module_icon', 'module_name_singular', 'module_action', 'volunteering_hour_count')
+        );
+    }
+    public function index_data()
+    {
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_path = $this->module_path;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'List';
+ 
+        $user = Auth::user();
+
+       if ($user->hasRole('super admin')) {
+            $$module_name = $module_model::select('id', 'name','association_name','created_by_name','volunteering_hour', 'slug', 'volunteering_date', 'updated_at');
+        }
+        else{
+            $$module_name = $module_model::select('id', 'name','association_name', 'slug', 'volunteering_date', 'updated_at')->where('created_by', '=',Auth::user()->id);
+        }
+      
+
+        $data = $$module_name;
+        $volunteering_hour_count = $module_model::get()->count();
+        return Datatables::of($$module_name)
+                        ->addColumn('action', function ($data) {
+                            $module_name = $this->module_name;
+
+                            return view('backend.includes.action_column', compact('module_name', 'data'));
+                        })
+                        ->editColumn('name', '<strong>{{$name}}</strong>')
+                        ->editColumn('updated_at', function ($data) {
+                            $module_name = $this->module_name;
+
+                            $diff = Carbon::now()->diffInHours($data->updated_at);
+
+                            if ($diff < 25) {
+                                return $data->updated_at->diffForHumans();
+                            } else {
+                                return $data->updated_at->isoFormat('LLLL');
+                            }
+                        })
+                        ->rawColumns(['name', 'action'])
+                        ->orderColumns(['id'], '-:column $1')
+                        ->make(true);
+    }
+
     public function store(Request $request)
     {
         $module_title = $this->module_title;
