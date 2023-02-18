@@ -17,7 +17,7 @@ class VolunteeringsController extends Controller
         $this->module_name = 'volunteerings';
 
         // directory path of the module
-        $this->module_path = 'volunteering::backend';
+        $this->module_path = 'volunteerings';
 
         // module icon
         $this->module_icon = 'fa-regular fa-sun';
@@ -30,7 +30,7 @@ class VolunteeringsController extends Controller
      * Display a listing of the resource.
      *
      * @return Response
-     */
+     */ 
     public function index()
     {
         $module_title = $this->module_title;
