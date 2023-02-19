@@ -3,5 +3,6 @@
     "Tag": true,
     "Comment": true,
     "Association": true,
-    "Volunteering": true
+    "Volunteering": true,
+    "Yearplan": true
 }

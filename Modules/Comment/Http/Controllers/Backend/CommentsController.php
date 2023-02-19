@@ -16,7 +16,7 @@ use Modules\Comment\Http\Requests\Backend\CommentsRequest;
 use Modules\Comment\Notifications\NewCommentAdded;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\DataTables\DataTables;
-
+use App\Models\User;
 class CommentsController extends Controller
 {
     use Authorizable;
@@ -177,10 +177,15 @@ class CommentsController extends Controller
 
         $module_action = 'Store';
 
-        $$module_name_singular = $module_model::create($request->all());
+        $data = $request->except('tags_list');
+        $data['created_by_name'] = auth()->user()->name;
+        $$module_name_singular = $module_model::create($data);
+  //auth()->user()->notify(new NewCommentAdded($$module_name_singular));
 
-        auth()->user()->notify(new NewCommentAdded($$module_name_singular));
-
+  $users= User::get();
+        foreach ($users as $user) {
+            $user->notify(new NewCommentAdded($$module_name_singular));
+        }
         Flash::success("<i class='fas fa-check'></i> New '".Str::singular($module_title)."' Added")->important();
 
         Log::info(label_case($module_title.' '.$module_action)." | '".$$module_name_singular->name.'(ID:'.$$module_name_singular->id.") ' by User:".Auth::user()->name.'(ID:'.Auth::user()->id.')');

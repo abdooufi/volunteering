@@ -1,0 +1,13 @@
+{
+    "name": "Yearplan",
+    "alias": "yearplan",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Yearplan\\Providers\\YearplanServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

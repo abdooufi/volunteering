@@ -23,30 +23,35 @@
             </x-slot>
             <x-slot name="toolbar">
                 <x-backend.buttons.return-back />
-                <a href="{{ route("backend.$module_name.index") }}" class="btn btn-secondary" data-toggle="tooltip" title="{{ ucwords($module_name) }} List"><i class="fas fa-list"></i> List</a>
-                @can('edit_'.$module_name)
-                <x-buttons.edit route='{!!route("backend.$module_name.edit", $$module_name_singular)!!}' title="{{__('Edit')}} {{ ucwords(Str::singular($module_name)) }}" class="ms-1" />
-                @endcan
+                <a href="{{ route("backend.$module_name.index") }}" class="btn btn-secondary ms-1" data-toggle="tooltip" title="{{ __($module_title) }} List"><i class="fas fa-list-ul"></i> List</a>
             </x-slot>
         </x-backend.section-header>
 
         <hr>
 
         <div class="row mt-4">
-            <div class="col-12 col-sm-7">
+            <div class="col">
+                {{ html()->form('POST', route("backend.$module_name.store"))->acceptsFiles()->class('form')->open() }}
 
-                @include('backend.includes.show')
+                @include ("$module_path.$module_name.form")
 
-            </div>
-            <div class="col-12 col-sm-5">
-
-                <div class="text-center">
-                <a href="{{route("frontend.$module_name.show", [encode_id($$module_name_singular->id), $$module_name_singular->slug])}}" class="btn btn-success" target="_blank"><i class="fas fa-link"></i> Public View</a>
-           
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            {{ html()->button($text = "<i class='fas fa-plus-circle'></i> " . ucfirst($module_action) . "", $type = 'submit')->class('btn btn-success') }}
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="float-end">
+                            <div class="form-group">
+                                <x-buttons.cancel></x-buttons.cancel>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <hr>
 
-              
+                {{ html()->form()->close() }}
+
             </div>
         </div>
     </div>
@@ -54,13 +59,11 @@
     <div class="card-footer">
         <div class="row">
             <div class="col">
-                <small class="float-end text-muted">
-                    Updated: {{$$module_name_singular->updated_at->diffForHumans()}},
-                    Created at: {{$$module_name_singular->created_at->isoFormat('LLLL')}}
-                </small>
+
             </div>
         </div>
     </div>
 </div>
+
 
 @endsection

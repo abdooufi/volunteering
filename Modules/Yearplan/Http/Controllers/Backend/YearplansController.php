@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Volunteering\Http\Controllers\Backend;
+namespace Modules\Yearplan\Http\Controllers\Backend;
 
 use App\Authorizable;
 use App\Http\Controllers\Backend\BackendBaseController;
@@ -10,76 +10,33 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
+ 
 
-class VolunteeringsController extends BackendBaseController
+
+class YearplansController extends BackendBaseController
 {
     use Authorizable;
 
     public function __construct()
     {
         // Page Title
-        $this->module_title = 'Volunteerings';
+        $this->module_title = 'Yearplans';
 
         // module name
-        $this->module_name = 'volunteerings';
+        $this->module_name = 'yearplans';
 
         // directory path of the module
-        $this->module_path = 'volunteering::backend';
+        $this->module_path = 'yearplan::backend';
 
         // module icon
         $this->module_icon = 'fa-regular fa-sun';
 
         // module model name, path
-        $this->module_model = "Modules\Volunteering\Models\Volunteering";
+        $this->module_model = "Modules\Yearplan\Models\Yearplan";
     }
 
-  
 
-/**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        $module_title = $this->module_title;
-        $module_name = $this->module_name;
-        $module_icon = $this->module_icon;
-        $module_model = $this->module_model;
-          $module_path = $this->module_path;
-        $module_name_singular = Str::singular($module_name);
 
-        $module_action = 'List'; 
-
-        $user = Auth::user();
-
-        if ($user->hasRole('super admin')) {
-            $volunteering_hour_count = $module_model::get()->sum('volunteering_hour');
-        
-            $$module_name = $module_model::paginate();
-    
-            $$module_name_singular = $module_model::paginate();
-            }
-         else{
-            $volunteering_hour_count = $module_model::where('created_by', '=',Auth::user()->id)->get()->sum('volunteering_hour');
-        
-            $$module_name = $module_model::where('created_by', '=',Auth::user()->id)->paginate();
-    
-            $$module_name_singular = $module_model::where('created_by', '=',Auth::user()->id)->paginate();
-
-          }
-
-   
-
-        Log::info(label_case($module_title.' '.$module_action).' | User:'.Auth::user()->name.'(ID:'.Auth::user()->id.')');
-
-        return view(
-            "$module_path.$module_name.index_datatable",
-            compact('module_title', 'module_name', "$module_name", 'module_icon', 'module_name_singular', 'module_action', 'volunteering_hour_count')
-        );
-    }
-
-    
     public function index_data()
     {
         $module_title = $this->module_title;
@@ -93,12 +50,7 @@ class VolunteeringsController extends BackendBaseController
  
         $user = Auth::user();
 
-       if ($user->hasRole('super admin')) {
-            $$module_name = $module_model::select('id', 'name','association_name','created_by_name','volunteering_hour', 'slug', 'volunteering_date', 'updated_at');
-        }
-        else{
-            $$module_name = $module_model::select('id', 'name','association_name','created_by_name','volunteering_hour', 'slug', 'volunteering_date', 'updated_at')->where('created_by', '=',Auth::user()->id);
-        }
+        $$module_name = $module_model::select('id', 'name','from_date','to_date', 'slug', 'updated_at');
       
 
         $data = $$module_name;
@@ -125,7 +77,7 @@ class VolunteeringsController extends BackendBaseController
                         ->orderColumns(['id'], '-:column $1')
                         ->make(true);
     }
-
+    
     public function store(Request $request)
     {
         $module_title = $this->module_title;
@@ -139,7 +91,7 @@ class VolunteeringsController extends BackendBaseController
 
         
         $data = $request->except('attach_file');
-        $data['created_by_name'] = auth()->user()->name;
+    
         
         $$module_name_singular = $module_model::create($data);
 
@@ -198,7 +150,8 @@ class VolunteeringsController extends BackendBaseController
 
         logUserAccess($module_title.' '.$module_action.' | Id: '.$$module_name_singular->id);
 
-        return redirect()->route('backend.volunteerings.show', $$module_name_singular->id);
+        return redirect()->route('backend.yearplans.show', $$module_name_singular->id);
     }
+
 
 }

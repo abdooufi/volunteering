@@ -1,35 +1,29 @@
 <?php
 
-namespace Modules\Association\Http\Controllers\Frontend;
+namespace Modules\Yearplan\Http\Controllers\Frontend;
 
-use App\Authorizable;
 use App\Http\Controllers\Controller;
-use Flash;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class AssociationsController extends Controller
+class YearplansController extends Controller
 {
     public function __construct()
     {
         // Page Title
-        $this->module_title = 'Associations';
+        $this->module_title = 'Yearplans';
 
         // module name
-        $this->module_name = 'associations';
+        $this->module_name = 'yearplans';
 
         // directory path of the module
-        $this->module_path = 'associations';
+        $this->module_path = 'yearplan::backend';
 
         // module icon
         $this->module_icon = 'fa-regular fa-sun';
 
         // module model name, path
-        $this->module_model = "Modules\Association\Models\Association";
+        $this->module_model = "Modules\Yearplan\Models\Yearplan";
     }
 
     /**
@@ -51,7 +45,7 @@ class AssociationsController extends Controller
         $$module_name = $module_model::latest()->paginate();
 
         return view(
-            "association::frontend.$module_path.index",
+            "yearplan::frontend.$module_path.index",
             compact('module_title', 'module_name', "$module_name", 'module_icon', 'module_action', 'module_name_singular')
         );
     }
@@ -76,11 +70,10 @@ class AssociationsController extends Controller
         $module_action = 'Show';
 
         $$module_name_singular = $module_model::findOrFail($id);
- $volunteerings = $$module_name_singular->volunteerings()->latest()->paginate();
-    
+
         return view(
-            "association::frontend.$module_name.show",
-            compact('module_title', 'module_name', 'module_icon', 'module_action', 'module_name_singular', "$module_name_singular", 'volunteerings')
+            "yearplan::frontend.$module_name.show",
+            compact('module_title', 'module_name', 'module_icon', 'module_action', 'module_name_singular', "$module_name_singular", 'posts')
         );
     }
 }

@@ -14,7 +14,6 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-
         <x-backend.section-header>
             <i class="{{ $module_icon }}"></i> {{ __($module_title) }} <small class="text-muted">{{ __($module_action) }}</small>
 
@@ -23,30 +22,36 @@
             </x-slot>
             <x-slot name="toolbar">
                 <x-backend.buttons.return-back />
-                <a href="{{ route("backend.$module_name.index") }}" class="btn btn-secondary" data-toggle="tooltip" title="{{ ucwords($module_name) }} List"><i class="fas fa-list"></i> List</a>
-                @can('edit_'.$module_name)
-                <x-buttons.edit route='{!!route("backend.$module_name.edit", $$module_name_singular)!!}' title="{{__('Edit')}} {{ ucwords(Str::singular($module_name)) }}" class="ms-1" />
-                @endcan
+                <x-buttons.show route='{!!route("backend.$module_name.show", $$module_name_singular)!!}' title="{{__('Show')}} {{ ucwords(Str::singular($module_name)) }}" class="ms-1" />
             </x-slot>
         </x-backend.section-header>
 
         <hr>
 
         <div class="row mt-4">
-            <div class="col-12 col-sm-7">
+            <div class="col">
+                {{ html()->modelForm($$module_name_singular, 'PATCH', route("backend.$module_name.update", $$module_name_singular))->acceptsFiles()->class('form')->open() }}
 
-                @include('backend.includes.show')
+                @include ("$module_path.$module_name.form")
 
-            </div>
-            <div class="col-12 col-sm-5">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            {{ html()->submit($text = icon('fas fa-save')." Save")->class('btn btn-success') }}
+                        </div>
+                    </div>
+                    {{ html()->form()->close() }}
 
-                <div class="text-center">
-                <a href="{{route("frontend.$module_name.show", [encode_id($$module_name_singular->id), $$module_name_singular->slug])}}" class="btn btn-success" target="_blank"><i class="fas fa-link"></i> Public View</a>
-           
+                    <div class="col-8">
+                        <div class="float-end">
+                            @can('delete_'.$module_name)
+                            <a href="{{route("backend.$module_name.destroy", $$module_name_singular)}}" class="btn btn-danger" data-method="DELETE" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('labels.backend.delete')}}"><i class="fas fa-trash-alt"></i></a>
+                            @endcan
+                            <x-buttons.cancel></x-buttons.cancel>
+                        </div>
+                    </div>
                 </div>
-                <hr>
 
-              
             </div>
         </div>
     </div>

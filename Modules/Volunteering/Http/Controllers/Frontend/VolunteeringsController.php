@@ -1,15 +1,18 @@
 <?php
 
 namespace Modules\Volunteering\Http\Controllers\Frontend;
-
+use App\Authorizable;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 class VolunteeringsController extends Controller
 {
+    use Authorizable;
     public function __construct()
     {
+        
         // Page Title
         $this->module_title = 'Volunteerings';
 
@@ -42,8 +45,16 @@ class VolunteeringsController extends Controller
 
         $module_action = 'List';
 
-        $$module_name = $module_model::latest()->paginate();
+        $user = Auth::user();
 
+
+      if ($user->hasRole('super admin')) {
+        $$module_name = $module_model::latest()->paginate();     }
+        else{
+            $$module_name = $module_model::where('created_by', '=',Auth::user()->id)->paginate();
+        
+        }
+        
         return view(
             "volunteering::frontend.$module_path.index",
             compact('module_title', 'module_name', "$module_name", 'module_icon', 'module_action', 'module_name_singular')
