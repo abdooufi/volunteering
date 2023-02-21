@@ -76,11 +76,28 @@ class AssociationsController extends Controller
         $module_action = 'Show';
 
         $$module_name_singular = $module_model::findOrFail($id);
- $volunteerings = $$module_name_singular->volunteerings()->latest()->paginate();
+
+        if (Auth::user()->hasRole('super admin') || (Auth::user() -> hasPermissionTo('view_All'))) {
+            $volunteerings = $$module_name_singular->volunteerings()->latest()->paginate();
+        
+        }
+            else{
+              
+                $volunteerings = $$module_name_singular->volunteerings()->where('created_by', '=',Auth::user()->id)->latest()->paginate();
+            }
+
+
     
+
+
         return view(
             "association::frontend.$module_name.show",
             compact('module_title', 'module_name', 'module_icon', 'module_action', 'module_name_singular', "$module_name_singular", 'volunteerings')
         );
     }
+
+
+ 
+
+
 }

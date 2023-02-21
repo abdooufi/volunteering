@@ -42,6 +42,31 @@
             <td>Maximum date:</td>
             <td><input type="text" class="form-control" id="max" name="max"></td>
         </tr>
+        
+        @can('view_users')
+              
+         
+              <tr>
+                  <td>user:</td>
+                  <td><?php
+                  $field_name = 'user_id';
+              
+                  $field_relation = "user";
+                  $field_placeholder = __("Select an option");
+                  $required = "";
+                  ?>
+                  
+                  {{ html()->select($field_name, isset($$module_name_singular)?optional($$module_name_singular->$field_relation)->pluck('name', 'id'):'')->placeholder($field_placeholder)->class('form-control select2-users')}}
+         
+              </td>
+              </tr>
+              @endcan
+  
+        <tr>
+            <td>Display All</td>
+            <td> <button type="button" id="DispalyALL" class="btn btn-primary">Display All</button>    </td>
+        </tr>
+
     </tbody></table>
 
     <div class="col-sm-3 col-md-12">
@@ -115,8 +140,6 @@
 @endsection
 
 
-
-
 @push ('after-styles')
 <!-- DataTables Core and Extensions -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
@@ -144,11 +167,22 @@
 <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.13.2/api/sum().js"></script>
 
 
+<link href="{{ asset('vendor/select2/select2-coreui-bootstrap4.min.css') }}" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+ 
+
+<script type="text/javascript">
+
+ 
+</script>
 
 <script>
  
  var minDate, maxDate;
  
+ 
+
+
  // Custom filtering function which will search data in column four between two values
  $.fn.dataTable.ext.search.push(
      function( settings, data, dataIndex ) {
@@ -235,6 +269,44 @@ sum += amount;
          GetTotL() ;
         
      });
+
+
+     $('.select2-users').select2({
+        theme: "bootstrap",
+        placeholder: "-- Select an option --",
+        minimumInputLength: 0,
+        allowClear: true,
+        ajax: {
+            url: '{{route("backend.users.index_list")}}',
+            dataType: 'json',
+            data: function (params) {
+                return {
+                    q: $.trim(params.term)
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        }
+    });
+
+    $('.select2-users').on('select2:select', function (e) {
+    var data = e.params.data.text;
+    console.log(data);
+    table.search( data ).draw();
+         GetTotL() ;
+});
+
+
+$("#DispalyALL").click(function(){
+    table.search("" ).draw();
+         GetTotL() ;
+});
+
+
  });
 
 </script>

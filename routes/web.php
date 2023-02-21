@@ -32,6 +32,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Frontend', 'as' => 'frontend.
     Route::get('home', 'FrontendController@index')->name('home');
     Route::get('privacy', 'FrontendController@privacy')->name('privacy');
     Route::get('terms', 'FrontendController@terms')->name('terms');
+    Route::get('showall', 'FrontendController@showall')->name('showall');
+
+
+    Route::get("showall/{id}", ['as' => "FrontendController.showall", 'uses' => "FrontendController@showall"]);
 
     Route::group(['middleware' => ['auth']], function () {
         /*

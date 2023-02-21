@@ -45,10 +45,10 @@ class VolunteeringsController extends Controller
 
         $module_action = 'List';
 
-        $user = Auth::user();
+      
 
 
-      if ($user->hasRole('super admin')) {
+      if (Auth::user()->hasRole('super admin') || (Auth::user() -> hasPermissionTo('view_All'))) {
         $$module_name = $module_model::latest()->paginate();     }
         else{
             $$module_name = $module_model::where('created_by', '=',Auth::user()->id)->paginate();

@@ -17,12 +17,13 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laracasts\Flash\Flash;
 use Yajra\DataTables\DataTables;
-
+ 
 class UserController extends Controller
 {
     use Authorizable;
@@ -143,19 +144,38 @@ class UserController extends Controller
         $title = $page_heading.' '.label_case($module_action);
 
         $term = trim($request->q);
+  
+        if (Auth::user()->hasRole('super admin') || (Auth::user() -> hasPermissionTo('view_All'))) {
 
         if (empty($term)) {
-            return response()->json([]);
+            $query_data = $module_model::where('name', 'LIKE', "%$term%")->orWhere('email', 'LIKE', "%$term%")->limit(10)->get();
+        }
+        else{
+        
+
+        }
+    }
+    else{
+
+        if (empty($term)) {
+        
+            $query_data = $module_model::where('id', '=',Auth::user()->id)->paginate();
+        }
+        else{
+       
+            $query_data = $module_model::where('id', '=',Auth::user()->id)->where('name', 'LIKE', "%$term%")->paginate();
+        
         }
 
-        $query_data = $module_model::where('name', 'LIKE', "%$term%")->orWhere('email', 'LIKE', "%$term%")->limit(10)->get();
+    }
+       
 
         $$module_name = [];
 
         foreach ($query_data as $row) {
             $$module_name[] = [
                 'id'   => $row->id,
-                'text' => $row->name.' (Email: '.$row->email.')',
+                'text' => $row->name,
             ];
         }
 
