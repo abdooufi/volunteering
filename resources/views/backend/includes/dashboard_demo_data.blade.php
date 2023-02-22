@@ -77,7 +77,7 @@
             <div class="card-body p-3 d-flex align-items-center">
                 <div class="bg-primary text-white p-3 me-3">
                     <svg class="icon icon-xl">
-                        <use xlink:href="/fonts/free.svg#cid-timer"></use>
+                        <use xlink:href="/fonts/free.svg#cil-braille"></use>
                     </svg>
                 </div>
                 <div>

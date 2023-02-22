@@ -22,7 +22,8 @@
                 @can('add_'.$module_name)
                 <x-buttons.create route='{{ route("backend.$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
                 @endcan
-
+                <a href="{{route("frontend.$module_name.index")}}" class="btn btn-primary" target="_blank"><i class="fas fa-link"></i> Public View</a>
+        
                 @can('restore_'.$module_name)
                 <div class="btn-group">
                     <button class="btn btn-secondary dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">

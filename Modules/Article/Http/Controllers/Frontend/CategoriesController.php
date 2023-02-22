@@ -1,13 +1,14 @@
 <?php
 
 namespace Modules\Article\Http\Controllers\Frontend;
-
+use App\Authorizable;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
 {
+    use Authorizable;
     public function __construct()
     {
         // Page Title

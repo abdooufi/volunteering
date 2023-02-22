@@ -3,6 +3,7 @@
 namespace Modules\Comment\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Authorizable;
 use Flash;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,6 +16,7 @@ use Modules\Comment\Notifications\NewCommentAdded;
 
 class CommentsController extends Controller
 {
+    use Authorizable;
     public function __construct()
     {
         // Page Title

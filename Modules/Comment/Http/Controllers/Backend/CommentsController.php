@@ -184,7 +184,12 @@ class CommentsController extends Controller
 
   $users= User::get();
         foreach ($users as $user) {
+            
+            if ( $user->hasRole('super admin') || ($user->hasPermissionTo('view_comments'))) 
+            {
+
             $user->notify(new NewCommentAdded($$module_name_singular));
+            }
         }
         Flash::success("<i class='fas fa-check'></i> New '".Str::singular($module_title)."' Added")->important();
 

@@ -24,7 +24,7 @@ class GenerateMenus
         \Menu::make('admin_sidebar', function ($menu) {
 
             // Yearplans
-            $menu->add('<i class="nav-icon fa-regular fa-sun"></i> '.__('Yearplans'), [
+            $menu->add('<i class="nav-icon fa-solid fa-calendar-days"></i> '.__('Yearplans'), [
                 'route' => 'backend.yearplans.index',
                 'class' => 'nav-item',
             ])

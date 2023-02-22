@@ -24,7 +24,7 @@ class GenerateMenus
         \Menu::make('admin_sidebar', function ($menu) {
 
             // Associations
-            $menu->add('<i class="nav-icon fa-regular fa-sun"></i> '.__('Associations'), [
+            $menu->add('<i class="nav-icon fa-solid fa-user-nurse"></i> '.__('Associations'), [
                 'route' => 'backend.associations.index',
                 'class' => 'nav-item',
             ])

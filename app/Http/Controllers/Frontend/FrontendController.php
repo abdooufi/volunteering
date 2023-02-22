@@ -42,10 +42,4 @@ class FrontendController extends Controller
 
         return view('frontend.terms', compact('body_class'));
     }
-    public function showall()
-    {
-        $body_class = '';
-
-        return view('frontend.terms', compact('body_class'));
-    }
 }

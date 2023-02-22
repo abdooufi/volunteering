@@ -2,8 +2,9 @@
 
 namespace Modules\Volunteering\Http\Controllers\Backend;
 
-use App\Authorizable;
+
 use App\Http\Controllers\Backend\BackendBaseController;
+use App\Authorizable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -53,7 +54,7 @@ class VolunteeringsController extends BackendBaseController
 
         $user = Auth::user();
 
-        if ($user->hasRole('super admin')) {
+        if (Auth::user()->hasRole('super admin') || (Auth::user() -> hasPermissionTo('view_All'))) {
             $volunteering_hour_count = $module_model::get()->sum('volunteering_hour');
         
             $$module_name = $module_model::paginate();
@@ -93,7 +94,7 @@ class VolunteeringsController extends BackendBaseController
  
         $user = Auth::user();
 
-       if ($user->hasRole('super admin')) {
+        if (Auth::user()->hasRole('super admin') || (Auth::user() -> hasPermissionTo('view_All'))) {
             $$module_name = $module_model::select('id', 'name','association_name','created_by_name','volunteering_hour', 'slug', 'volunteering_date', 'updated_at');
         }
         else{

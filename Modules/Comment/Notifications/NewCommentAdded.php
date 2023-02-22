@@ -33,7 +33,7 @@ class NewCommentAdded extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['slack', 'database'];
+        return ['mail','slack', 'database'];
     }
 
     /**
@@ -47,9 +47,11 @@ class NewCommentAdded extends Notification implements ShouldQueue
         $comment = $this->comment;
         $user = $notifiable;
 
+        $text = 'New Comment | <strong>'.$comment->name.'</strong> on <strong>'.$comment->post_name.'</strong>  by <strong>'.$comment->user_name.'</strong>';
+        $url_backend = route('backend.notifications.index');
         return (new MailMessage())
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', 'https://laravel.com')
+                    ->line('New Comment :'.$comment->name)
+                    ->action('Notification Action', $url_backend )
                     ->line('Thank you for using our application!');
     }
 
@@ -95,7 +97,7 @@ class NewCommentAdded extends Notification implements ShouldQueue
         $url_backend = route('backend.comments.show', $comment->id);
 
         return [
-            'title'         => 'New Comment for review!',
+            'title'         => 'New Comment :'.$comment->name,
             'module'        => 'Comment',
             'type'          => 'created', // created, published, viewed,
             'icon'          => 'fas fa-comments',

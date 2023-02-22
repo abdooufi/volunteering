@@ -24,7 +24,7 @@ class GenerateMenus
         \Menu::make('admin_sidebar', function ($menu) {
 
             // Volunteerings
-            $menu->add('<i class="nav-icon fa-regular fa-sun"></i> '.__('Volunteerings'), [
+            $menu->add('<i class="nav-icon fa-solid fa-handshake-angle"></i> '.__('Volunteerings'), [
                 'route' => 'backend.volunteerings.index',
                 'class' => 'nav-item',
             ])

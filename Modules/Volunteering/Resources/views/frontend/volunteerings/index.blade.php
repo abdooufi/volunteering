@@ -158,11 +158,7 @@
 <link href="{{ asset('vendor/select2/select2-coreui-bootstrap4.min.css') }}" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
  
-
-<script type="text/javascript">
-
  
-</script>
 
 <script>
  
@@ -290,7 +286,17 @@ sum += amount;
 
 
 $("#DispalyALL").click(function(){
-    table.search("" ).draw();
+    $('#min').val("");
+    $('#max').val("");
+    table.search("" );
+    minDate = new DateTime($('#min'), {
+         format: 'MMMM Do YYYY'
+     });
+     maxDate = new DateTime($('#max'), {
+         format: 'MMMM Do YYYY'
+     });
+     
+    table.draw();
          GetTotL() ;
 });
 

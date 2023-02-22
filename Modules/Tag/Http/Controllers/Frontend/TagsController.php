@@ -3,11 +3,13 @@
 namespace Modules\Tag\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Authorizable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 class TagsController extends Controller
 {
+    use Authorizable;
     public function __construct()
     {
         // Page Title

@@ -3,11 +3,13 @@
 namespace Modules\Yearplan\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Authorizable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 class YearplansController extends Controller
 {
+    use Authorizable;
     public function __construct()
     {
         // Page Title
@@ -17,7 +19,7 @@ class YearplansController extends Controller
         $this->module_name = 'yearplans';
 
         // directory path of the module
-        $this->module_path = 'yearplan::backend';
+        $this->module_path = 'yearplans';
 
         // module icon
         $this->module_icon = 'fa-regular fa-sun';
@@ -42,14 +44,16 @@ class YearplansController extends Controller
 
         $module_action = 'List';
 
-        $$module_name = $module_model::latest()->paginate();
+      
+
+        $$module_name= $module_model::get();
+
 
         return view(
             "yearplan::frontend.$module_path.index",
             compact('module_title', 'module_name', "$module_name", 'module_icon', 'module_action', 'module_name_singular')
         );
     }
-
     /**
      * Display the specified resource.
      *
@@ -70,10 +74,11 @@ class YearplansController extends Controller
         $module_action = 'Show';
 
         $$module_name_singular = $module_model::findOrFail($id);
-
+ 
+    
         return view(
             "yearplan::frontend.$module_name.show",
-            compact('module_title', 'module_name', 'module_icon', 'module_action', 'module_name_singular', "$module_name_singular", 'posts')
+            compact('module_title', 'module_name', 'module_icon', 'module_action', 'module_name_singular', "$module_name_singular")
         );
     }
 }
