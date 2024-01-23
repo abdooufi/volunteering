@@ -1,17 +1,5 @@
 <div class="row mb-3">
-    <div class="col-12 col-sm-4">
-        <div class="form-group">
-            <?php
-            $field_name = 'name';
-            $field_lable = label_case($field_name);
-            $field_placeholder = $field_lable;
-            $required = "required";
-            ?>
-            {{ html()->label($field_lable, $field_name)->class('form-label') }} {!! fielf_required($required) !!}
-            {{ html()->text($field_name)->placeholder($field_placeholder)->class('form-control')->attributes(["$required"]) }}
-        </div>
-    </div>
-     
+ 
     <div class="col-12 col-sm-4">
     <div class="form-group">
             <?php
@@ -38,42 +26,17 @@
 
         <div class="col-12 col-sm-4">
         <div class="form-group">
-            <?php
-             $field_name = 'volunteering_hour';
-             $field_lable = label_case($field_name);
-             $field_placeholder = $field_lable;
-             $required = "required";
-            $select_options = [
-                '1' => '1',
-                '2' => '2',
-                '3' => '3',
-                '4' => '4',
-                '5' => '5',
-                '6' => '6',
-                '7' => '7',
-                '8' => '8',
-                '9' => '9',
-                '10' => '10',
-                '11' => '11',
-                '12' => '12',
-                '13' => '13',
-                '14' => '14',
-                '15' => '15',
-                '16' => '16',
-                '17' => '17',
-                '18' => '18',
-                '19' => '19',
-                '20' => '20',
-                '21' => '21',
-                '22' => '22',
-                '23' => '23',
-                '24' => '24',
-                 
-               
-            ];
+                 <?php
+            $field_name = 'volunteering_hour';
+            $field_lable = label_case($field_name);
+            $field_placeholder = $field_lable;
+            $required = "required";
             ?>
-            {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
-            {{ html()->select($field_name, $select_options)->placeholder($field_placeholder)->class('form-control select2')->attributes(["$required"]) }}
+            {{ html()->label($field_lable, $field_name)->class('form-label') }} {!! fielf_required($required) !!}
+            {{ html()->time($field_name)->placeholder($field_placeholder)->class('form-control')->attributes(["$required", 'step'=>'any', 'min'=>'0.1', 'max'=>'24']) }}
+
+
+           
         </div>
     </div>
 
@@ -89,10 +52,10 @@
             $field_lable = label_case($field_name);
             $field_relation = "association";
             $field_placeholder = __("Select an option");
-            $required = "required";
+            $required = "";
             ?>
             {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
-            {{ html()->select($field_name, isset($$module_name_singular)?optional($$module_name_singular->$field_relation)->pluck('name', 'id'):'')->placeholder($field_placeholder)->class('form-control select2-association')->attributes(["$required"]) }}
+            {{ html()->select($field_name, isset($$module_name_singular)?optional($$module_name_singular->$field_relation)->pluck('name', 'id'):'')->placeholder($field_placeholder)->class('form-control select2-association')   }}
         </div>
     </div>
     </div>
